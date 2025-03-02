@@ -66,9 +66,15 @@ async function mane() {
 
 	// updating the cover.
 	const browser = await puppeteer.launch({
-		headless: "shell",
+		headless: true,
 	});
 	const page = await browser.newPage();
+	await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0');
+	await page.evaluateOnNewDocument(() => {
+		Object.defineProperty(navigator, 'webdriver', {
+			get: () => false,
+		});
+	});
 	await page.setCookie(...cookies);
 	await page.goto("https://www.fimfiction.net/manage/stories/" + story_id, {
 		waitUntil: "load",
